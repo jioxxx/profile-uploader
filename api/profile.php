@@ -123,7 +123,15 @@ function avatar_url($row)
   <div class="body">
 
     <?php if (isset($_GET['pending'])): ?>
-      <div class="flash-ok">📝 Profile registered! Please check your email inbox to verify your identity.</div>
+      <div class="flash-ok">
+        📝 Profile registered! Please check your email inbox to verify your identity.
+        <?php if (isset($_GET['demo_token'])): ?>
+          <br><br><span style="color:#d4a017"><b>⚠️ Demo Mode Active:</b> Normally an email is sent here, but no Vercel
+            email API is configured. <a href="verify.php?token=<?= htmlspecialchars($_GET['demo_token']) ?>"
+              style="text-decoration:underline; font-weight:bold; color:inherit;">Click here to simulate verifying your
+              email.</a></span>
+        <?php endif ?>
+      </div>
     <?php endif ?>
     <?php if (isset($_GET['verified'])): ?>
       <div class="flash-ok">✅ Identity verified successfully! Profile is now active.</div>

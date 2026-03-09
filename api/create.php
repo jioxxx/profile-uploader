@@ -88,7 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Send email notification to the user to verify identity
     notify_profile_verification($profileData, $verification_token);
 
-    header('Location: profile.php?u=' . urlencode($username) . '&pending=1');
+    $extra = '';
+    if (empty(getenv('MAIL_API_URL'))) {
+      $extra = '&demo_token=' . urlencode($verification_token);
+    }
+
+    header('Location: profile.php?u=' . urlencode($username) . '&pending=1' . $extra);
     exit;
   }
 }
