@@ -17,16 +17,25 @@ define('SMTP_PASSWORD', 'xxxx xxxx xxxx xxxx');        // Your 16-char App Passw
 define('SMTP_FROM_EMAIL', 'noreply@profilegen.local');
 define('SMTP_FROM_NAME', 'ProfileGen');
 
-function get_db() {
+function get_db()
+{
     static $pdo = null;
     if ($pdo === null) {
         try {
             $pdo = new PDO(
                 "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
-                DB_USER, DB_PASS,
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
+                DB_USER,
+                DB_PASS,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
             );
+
+            try {
+                $pdo->exec("ALTER TABLE profiles ADD COLUMN verified BOOLEAN DEFAULT FALSE, ADD COLUMN verification_token VARCHAR(255) DEFAULT NULL;");
+            } catch (\Exception $e) {
+            }
         } catch (PDOException $e) {
             die("<p style='color:red;font-family:sans-serif;padding:2rem'>
                 <strong>DB Error:</strong> " . $e->getMessage() . "<br><br>
