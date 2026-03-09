@@ -6,6 +6,10 @@
   },
   "routes": [
     {
+      "src": "/style.css",
+      "dest": "/style.css"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/$1"
     }
