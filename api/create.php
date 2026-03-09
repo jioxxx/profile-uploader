@@ -100,58 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Create Profile — ProfileGen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--green:#2d6a4f;--green-l:#40916c;--cream:#faf8f3;--paper:#fff;--ink:#1a1a1a;--muted:#888;--border:#e8e4da;--accent:#d4a017;--r:10px}
-body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--ink)}
-nav{background:var(--green);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between}
-.brand{font-family:'Playfair Display',serif;color:#fff;font-size:1.4rem;text-decoration:none}
-.brand span{color:var(--accent)}
-.back{color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem}
-.back:hover{color:#fff}
-
-.wrap{max-width:620px;margin:2.5rem auto;padding:0 1.5rem 3rem}
-.page-title{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:1.8rem}
-
-.card{background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:2rem;margin-bottom:1.2rem}
-.sec-label{font-size:.68rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:1.2rem}
-
-.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:500px){.row{grid-template-columns:1fr}}
-.fg{margin-bottom:1rem}
-label{display:block;font-size:.78rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
-input[type=text],input[type=email],input[type=url],textarea{width:100%;padding:.6rem .9rem;border:1.5px solid var(--border);border-radius:7px;font-family:'Lato',sans-serif;font-size:.92rem;background:var(--cream);color:var(--ink);outline:none;transition:border-color .15s}
-input:focus,textarea:focus{border-color:var(--green-l);background:#fff}
-textarea{resize:vertical;min-height:100px}
-.hint{font-size:.75rem;color:var(--muted);margin-top:.25rem}
-.err{font-size:.75rem;color:#c0392b;margin-top:.25rem}
-
-.prefix-wrap{display:flex;border:1.5px solid var(--border);border-radius:7px;overflow:hidden;background:var(--cream)}
-.prefix-wrap:focus-within{border-color:var(--green-l)}
-.prefix{padding:.6rem .8rem;font-size:.82rem;color:var(--muted);background:#f0ede6;border-right:1.5px solid var(--border);white-space:nowrap;flex-shrink:0}
-.prefix-wrap input{border:none;border-radius:0;background:transparent;flex:1}
-.prefix-wrap input:focus{border-color:transparent}
-
-/* avatar upload */
-.av-box{border:2px dashed var(--border);border-radius:var(--r);padding:1.5rem;text-align:center;cursor:pointer;transition:border-color .15s}
-.av-box:hover{border-color:var(--green-l)}
-#av-preview{width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto .6rem;display:block;border:2px solid var(--border)}
-
-/* skills */
-.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem;min-height:24px}
-.chip{display:inline-flex;align-items:center;gap:.3rem;background:var(--green);color:#fff;font-size:.75rem;font-weight:700;padding:.22rem .6rem;border-radius:99px}
-.chip button{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:.95rem;line-height:1;padding:0}
-.chip button:hover{color:#fff}
-
-.actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
-.btn{display:inline-flex;align-items:center;padding:.6rem 1.3rem;border-radius:7px;font-family:'Lato',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;text-decoration:none;border:none;transition:all .15s}
-.btn-green{background:var(--green);color:#fff}
-.btn-green:hover{background:#1e4d39}
-.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}
-.btn-outline:hover{border-color:var(--ink)}
-
-.flash-err{background:#fdecea;border-left:4px solid #c0392b;color:#922b21;padding:.75rem 1rem;border-radius:0 7px 7px 0;margin-bottom:1.5rem;font-size:.88rem}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 

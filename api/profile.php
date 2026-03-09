@@ -42,61 +42,7 @@ function avatar_url($row) {
 <title><?= htmlspecialchars($p['name']) ?> — ProfileGen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--green:#2d6a4f;--green-l:#40916c;--cream:#faf8f3;--paper:#fff;--ink:#1a1a1a;--muted:#888;--border:#e8e4da;--accent:#d4a017;--r:10px}
-body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--ink)}
-nav{background:var(--green);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between}
-.brand{font-family:'Playfair Display',serif;color:#fff;font-size:1.4rem;text-decoration:none}
-.brand span{color:var(--accent)}
-.back{color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem}
-.back:hover{color:#fff}
-
-/* HERO */
-.hero{background:var(--green);padding:3rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:40px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%)}
-.hero-inner{max-width:600px;margin:0 auto;position:relative;z-index:1}
-.avatar{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,.2);box-shadow:0 6px 24px rgba(0,0,0,.3);margin-bottom:1rem}
-.pname{font-family:'Playfair Display',serif;color:#fff;font-size:2rem;line-height:1.1;letter-spacing:-.5px}
-.phandle{color:rgba(255,255,255,.55);font-size:.88rem;margin-top:.25rem}
-.pheadline{color:rgba(255,255,255,.8);font-size:.97rem;margin-top:.6rem;line-height:1.5}
-.meta-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:1rem}
-.meta-item{font-size:.8rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:.3rem}
-.meta-item a{color:rgba(255,255,255,.55);text-decoration:none}
-.meta-item a:hover{color:#fff}
-
-/* SOCIAL PILLS */
-.socials{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:1.1rem}
-.spill{display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:700;padding:.3rem .8rem;border-radius:99px;text-decoration:none;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);transition:all .15s}
-.spill:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff}
-
-/* BODY */
-.body{max-width:680px;margin:-2.5rem auto 0;padding:0 1.5rem 3rem;position:relative;z-index:2}
-
-.flash-ok{background:#d1fae5;border-left:4px solid #10b981;color:#065f46;padding:.65rem 1rem;border-radius:0 7px 7px 0;margin-bottom:1.2rem;font-size:.88rem}
-
-.actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem}
-.btn{display:inline-flex;align-items:center;padding:.5rem 1.1rem;border-radius:7px;font-family:'Lato',sans-serif;font-size:.84rem;font-weight:700;text-decoration:none;cursor:pointer;border:none;transition:all .15s}
-.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}
-.btn-outline:hover{border-color:var(--ink)}
-.btn-del{background:#fdecea;color:#922b21;border:1.5px solid #f5c6cb}
-.btn-del:hover{background:#c0392b;color:#fff;border-color:#c0392b}
-
-.pcard{background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1rem}
-.clabel{font-size:.67rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:1rem}
-.bio{font-size:.93rem;line-height:1.75;color:#3a3940;white-space:pre-line}
-
-.skill-cloud{display:flex;flex-wrap:wrap;gap:.4rem}
-.stag{font-size:.78rem;font-weight:700;background:#edf7f2;color:var(--green-l);border:1px solid #b7e4c7;padding:.25rem .65rem;border-radius:99px}
-
-.detail-row{display:flex;flex-direction:column;gap:.6rem}
-.drow{display:flex;align-items:center;gap:.6rem;font-size:.9rem}
-.drow a{color:var(--green-l);text-decoration:none}
-.drow a:hover{text-decoration:underline}
-.dicon{color:var(--muted);flex-shrink:0}
-
-footer{text-align:center;padding:2rem;font-size:.8rem;color:var(--muted);border-top:1px solid var(--border)}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -105,7 +51,7 @@ footer{text-align:center;padding:2rem;font-size:.8rem;color:var(--muted);border-
   <a class="back" href="index.php">← All Profiles</a>
 </nav>
 
-<div class="hero">
+<div class="hero-pd">
   <div class="hero-inner">
     <img class="avatar" src="<?= avatar_url($p) ?>" alt="<?= htmlspecialchars($p['name']) ?>">
     <div class="pname"><?= htmlspecialchars($p['name']) ?></div>
