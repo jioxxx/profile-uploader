@@ -4,6 +4,12 @@ require 'db.php';
 // Get profiles from JSON storage
 $profiles = get_all_profiles();
 
+// Hide unverified profiles
+$profiles = array_filter($profiles, function ($p) {
+  return !isset($p['verified']) || $p['verified'] === true;
+});
+$profiles = array_values($profiles);
+
 // Simple search
 $search = trim($_GET['q'] ?? '');
 

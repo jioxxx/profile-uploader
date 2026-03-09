@@ -18,6 +18,8 @@ if ($path === '' || $path === 'index.php') {
     require __DIR__ . '/edit.php';
 } elseif ($path === 'delete.php') {
     require __DIR__ . '/delete.php';
+} elseif ($path === 'verify.php') {
+    require __DIR__ . '/verify.php';
 } else {
     // fallback
     require __DIR__ . '/index.php';

@@ -147,6 +147,58 @@ HTML;
 }
 
 /**
+ * Send profile verification notification
+ * 
+ * @param array $profile Profile data array
+ * @param string $token Verification token
+ */
+function notify_profile_verification($profile, $token)
+{
+    $to = $profile['email'];
+    $subject = "Action Required: Verify Your ProfileGen Identity";
+
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    if (getenv('VERCEL') === '1') {
+        $protocol = 'https';
+    }
+
+    $verify_link = "$protocol://$host/verify.php?token=$token";
+
+    $body = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Identity</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #d4a017 0%, #a37c15 100%); padding: 30px; border-radius: 10px 10px 0 0;">
+        <h1 style="color: #fff; margin: 0; font-size: 24px;">Action Required: Verify Identity</h1>
+    </div>
+    
+    <div style="background: #faf8f3; padding: 30px; border: 1px solid #e8e4da; border-top: none; border-radius: 0 0 10px 10px;">
+        <p>Hi <strong>{$profile['name']}</strong>,</p>
+        
+        <p>You recently registered a profile on <strong>ProfileGen</strong>. Please tap the button below to verify your identity.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{$verify_link}" style="display: inline-block; background: #2d6a4f; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 7px; font-weight: bold;">Verify My Profile</a>
+        </div>
+        
+        <hr style="border: none; border-top: 1px solid #e8e4da; margin: 30px 0;">
+        
+        <p style="color: #888; font-size: 14px; margin: 0;">If you didn't create a profile, you can safely ignore this email.</p>
+    </div>
+</body>
+</html>
+HTML;
+
+    return send_email($to, $subject, $body);
+}
+
+/**
  * Send profile visit notification to the profile owner
  * 
  * @param array $profile Profile data array

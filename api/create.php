@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (!$errors) {
+    $verification_token = bin2hex(random_bytes(16));
     $profileData = [
       'name' => $name,
       'username' => $username,
@@ -77,20 +78,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       'github' => $github,
       'twitter' => $twitter,
       'linkedin' => $linkedin,
-      'skills' => $skills
+      'skills' => $skills,
+      'verified' => false,
+      'verification_token' => $verification_token
     ];
 
     create_profile($profileData);
 
-    // Send email notification to the user
-    $new_profile = [
-      'name' => $name,
-      'username' => $username,
-      'email' => $email
-    ];
-    notify_profile_created($new_profile);
+    // Send email notification to the user to verify identity
+    notify_profile_verification($profileData, $verification_token);
 
-    header('Location: profile.php?u=' . urlencode($username) . '&created=1');
+    header('Location: profile.php?u=' . urlencode($username) . '&pending=1');
     exit;
   }
 }

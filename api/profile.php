@@ -122,8 +122,11 @@ function avatar_url($row)
 
   <div class="body">
 
-    <?php if (isset($_GET['created'])): ?>
-      <div class="flash-ok">✅ Profile created successfully!</div>
+    <?php if (isset($_GET['pending'])): ?>
+      <div class="flash-ok">📝 Profile registered! Please check your email inbox to verify your identity.</div>
+    <?php endif ?>
+    <?php if (isset($_GET['verified'])): ?>
+      <div class="flash-ok">✅ Identity verified successfully! Profile is now active.</div>
     <?php endif ?>
 
     <div class="actions">
