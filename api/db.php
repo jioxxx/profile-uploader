@@ -10,17 +10,22 @@ define('BLOB_STORE_URL', getenv('BLOB_STORE_URL') ?: '');
 define('BLOB_STORE_TOKEN', getenv('BLOB_STORE_TOKEN') ?: '');
 define('BLOB_NAME', 'profiles.json');
 
-// Local development fallback - use local JSON file
-define('USE_LOCAL_FALLBACK', getenv('VERCEL') !== '1');
+// Local development fallback - use local JSON file if Blob is not configured
+define('USE_LOCAL_FALLBACK', empty(BLOB_STORE_URL));
 
 if (USE_LOCAL_FALLBACK) {
-    define('LOCAL_DATA_FILE', __DIR__ . '/data/profiles.json');
+    if (getenv('VERCEL') === '1') {
+        define('LOCAL_DATA_FILE', '/tmp/profiles.json');
+    } else {
+        define('LOCAL_DATA_FILE', __DIR__ . '/data/profiles.json');
+    }
 }
 
 /**
  * Get all profiles from storage
  */
-function get_all_profiles() {
+function get_all_profiles()
+{
     if (USE_LOCAL_FALLBACK) {
         return get_all_profiles_local();
     }
@@ -30,7 +35,8 @@ function get_all_profiles() {
 /**
  * Get a single profile by username
  */
-function get_profile($username) {
+function get_profile($username)
+{
     if (USE_LOCAL_FALLBACK) {
         return get_profile_local($username);
     }
@@ -40,7 +46,8 @@ function get_profile($username) {
 /**
  * Create a new profile
  */
-function create_profile($data) {
+function create_profile($data)
+{
     if (USE_LOCAL_FALLBACK) {
         return create_profile_local($data);
     }
@@ -50,7 +57,8 @@ function create_profile($data) {
 /**
  * Update a profile
  */
-function update_profile($username, $data) {
+function update_profile($username, $data)
+{
     if (USE_LOCAL_FALLBACK) {
         return update_profile_local($username, $data);
     }
@@ -60,7 +68,8 @@ function update_profile($username, $data) {
 /**
  * Delete a profile
  */
-function delete_profile($username) {
+function delete_profile($username)
+{
     if (USE_LOCAL_FALLBACK) {
         return delete_profile_local($username);
     }
@@ -71,12 +80,14 @@ function delete_profile($username) {
 // Vercel Blob Implementation
 // ============================================
 
-function get_all_profiles_blob() {
+function get_all_profiles_blob()
+{
     $data = fetch_blob();
     return $data['profiles'] ?? [];
 }
 
-function get_profile_blob($username) {
+function get_profile_blob($username)
+{
     $profiles = get_all_profiles_blob();
     foreach ($profiles as $p) {
         if ($p['username'] === $username) {
@@ -86,7 +97,8 @@ function get_profile_blob($username) {
     return null;
 }
 
-function create_profile_blob($data) {
+function create_profile_blob($data)
+{
     $profiles = get_all_profiles_blob();
     $data['id'] = uniqid();
     $data['created_at'] = date('Y-m-d H:i:s');
@@ -95,7 +107,8 @@ function create_profile_blob($data) {
     return $data;
 }
 
-function update_profile_blob($username, $data) {
+function update_profile_blob($username, $data)
+{
     $profiles = get_all_profiles_blob();
     foreach ($profiles as &$p) {
         if ($p['username'] === $username) {
@@ -107,17 +120,19 @@ function update_profile_blob($username, $data) {
     save_blob($profiles);
 }
 
-function delete_profile_blob($username) {
+function delete_profile_blob($username)
+{
     $profiles = get_all_profiles_blob();
     $profiles = array_filter($profiles, fn($p) => $p['username'] !== $username);
     save_blob(array_values($profiles));
 }
 
-function fetch_blob() {
+function fetch_blob()
+{
     if (empty(BLOB_STORE_URL)) {
         return ['profiles' => []];
     }
-    
+
     $ch = curl_init(BLOB_STORE_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -126,20 +141,21 @@ function fetch_blob() {
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    
+
     if ($httpCode === 200) {
         return json_decode($response, true) ?: ['profiles' => []];
     }
     return ['profiles' => []];
 }
 
-function save_blob($profiles) {
+function save_blob($profiles)
+{
     if (empty(BLOB_STORE_URL)) {
         return;
     }
-    
+
     $json = json_encode(['profiles' => $profiles], JSON_PRETTY_PRINT);
-    
+
     // Use PUT to update the blob
     $ch = curl_init(BLOB_STORE_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -157,7 +173,8 @@ function save_blob($profiles) {
 // Local JSON File Implementation (Fallback)
 // ============================================
 
-function get_all_profiles_local() {
+function get_all_profiles_local()
+{
     $file = LOCAL_DATA_FILE;
     if (!file_exists($file)) {
         // Create directory if needed
@@ -172,7 +189,8 @@ function get_all_profiles_local() {
     return $data['profiles'] ?? [];
 }
 
-function get_profile_local($username) {
+function get_profile_local($username)
+{
     $profiles = get_all_profiles_local();
     foreach ($profiles as $p) {
         if ($p['username'] === $username) {
@@ -182,7 +200,8 @@ function get_profile_local($username) {
     return null;
 }
 
-function create_profile_local($data) {
+function create_profile_local($data)
+{
     $profiles = get_all_profiles_local();
     $data['id'] = uniqid();
     $data['created_at'] = date('Y-m-d H:i:s');
@@ -191,7 +210,8 @@ function create_profile_local($data) {
     return $data;
 }
 
-function update_profile_local($username, $data) {
+function update_profile_local($username, $data)
+{
     $profiles = get_all_profiles_local();
     foreach ($profiles as &$p) {
         if ($p['username'] === $username) {
@@ -203,13 +223,15 @@ function update_profile_local($username, $data) {
     save_profiles_local($profiles);
 }
 
-function delete_profile_local($username) {
+function delete_profile_local($username)
+{
     $profiles = get_all_profiles_local();
     $profiles = array_filter($profiles, fn($p) => $p['username'] !== $username);
     save_profiles_local(array_values($profiles));
 }
 
-function save_profiles_local($profiles) {
+function save_profiles_local($profiles)
+{
     $file = LOCAL_DATA_FILE;
     $dir = dirname($file);
     if (!is_dir($dir)) {
@@ -220,6 +242,7 @@ function save_profiles_local($profiles) {
 }
 
 // Alias for compatibility
-function get_db() {
-    return (object)['profiles' => get_all_profiles()];
+function get_db()
+{
+    return (object) ['profiles' => get_all_profiles()];
 }
