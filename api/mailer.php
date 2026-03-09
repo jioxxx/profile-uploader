@@ -1,4 +1,4 @@
-g<?php
+<?php
 /**
  * ProfileGen Mailer for Vercel
  * Uses a simple API-based approach for sending emails
@@ -18,7 +18,8 @@ define('FROM_NAME', getenv('FROM_NAME') ?: 'ProfileGen');
  * @param string $body Email body (HTML)
  * @return bool True if email was sent successfully
  */
-function send_email($to, $subject, $body) {
+function send_email($to, $subject, $body)
+{
     // If no API configured, log to stderr (visible in Vercel logs)
     if (empty(MAIL_API_URL)) {
         error_log("Email would be sent to: $to");
@@ -26,12 +27,12 @@ function send_email($to, $subject, $body) {
         // In development, just return true and log
         return true;
     }
-    
+
     // Use Resend API (recommended for Vercel)
     if (strpos(MAIL_API_URL, 'resend.com') !== false) {
         return send_via_resend($to, $subject, $body);
     }
-    
+
     // Generic API call
     return send_via_api($to, $subject, $body);
 }
@@ -39,14 +40,15 @@ function send_email($to, $subject, $body) {
 /**
  * Send email via Resend API
  */
-function send_via_resend($to, $subject, $body) {
+function send_via_resend($to, $subject, $body)
+{
     $data = [
         'from' => FROM_NAME . ' <' . FROM_EMAIL . '>',
         'to' => $to,
         'subject' => $subject,
         'html' => $body
     ];
-    
+
     $ch = curl_init(MAIL_API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -55,25 +57,26 @@ function send_via_resend($to, $subject, $body) {
         'Authorization: Bearer ' . MAIL_API_KEY,
         'Content-Type: application/json'
     ]);
-    
+
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    
+
     return $httpCode >= 200 && $httpCode < 300;
 }
 
 /**
  * Send email via generic API
  */
-function send_via_api($to, $subject, $body) {
+function send_via_api($to, $subject, $body)
+{
     $data = [
         'to' => $to,
         'subject' => $subject,
         'body' => $body,
         'from' => FROM_NAME . ' <' . FROM_EMAIL . '>'
     ];
-    
+
     $ch = curl_init(MAIL_API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -82,10 +85,10 @@ function send_via_api($to, $subject, $body) {
         'Authorization: Bearer ' . MAIL_API_KEY,
         'Content-Type: application/json'
     ]);
-    
+
     $response = curl_exec($ch);
     curl_close($ch);
-    
+
     return !empty($response);
 }
 
@@ -94,10 +97,11 @@ function send_via_api($to, $subject, $body) {
  * 
  * @param array $profile Profile data array
  */
-function notify_profile_created($profile) {
+function notify_profile_created($profile)
+{
     $to = $profile['email'];
     $subject = "✅ Your Profile on ProfileGen Has Been Created!";
-    
+
     $body = <<<HTML
 <!DOCTYPE html>
 <html>
@@ -138,7 +142,7 @@ function notify_profile_created($profile) {
 </body>
 </html>
 HTML;
-    
+
     return send_email($to, $subject, $body);
 }
 
@@ -149,12 +153,13 @@ HTML;
  * @param string $visitor_ip Visitor's IP address (optional)
  * @param string $visitor_url URL they came from (optional)
  */
-function notify_profile_visited($profile, $visitor_ip = 'Unknown', $visitor_url = '') {
+function notify_profile_visited($profile, $visitor_ip = 'Unknown', $visitor_url = '')
+{
     $to = $profile['email'];
     $subject = "👁 Someone Just Visited Your Profile on ProfileGen!";
-    
+
     $visit_time = date('F j, Y \a\t g:i A');
-    
+
     $body = <<<HTML
 <!DOCTYPE html>
 <html>
@@ -182,11 +187,11 @@ HTML;
     if ($visitor_ip !== 'Unknown' && $visitor_ip !== '') {
         $body .= "            <p><strong>Visitor IP:</strong> {$visitor_ip}</p>\n";
     }
-    
+
     if ($visitor_url !== '') {
         $body .= "            <p><strong>Referrer:</strong> {$visitor_url}</p>\n";
     }
-    
+
     $body .= <<<HTML
         </div>
         
@@ -203,6 +208,6 @@ HTML;
 </body>
 </html>
 HTML;
-    
+
     return send_email($to, $subject, $body);
 }
